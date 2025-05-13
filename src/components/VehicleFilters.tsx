@@ -47,7 +47,7 @@ const VehicleFilters = ({
 
   // Update cities when state is selected
   useEffect(() => {
-    if (selectedState) {
+    if (selectedState && selectedState !== "all") {
       const stateData = states.find((state) => state.abbreviation === selectedState);
       if (stateData) {
         setCities(stateData.cities.map((city) => city.name));
@@ -65,7 +65,7 @@ const VehicleFilters = ({
 
   // Update regions when city is selected
   useEffect(() => {
-    if (selectedState && selectedCity) {
+    if (selectedState && selectedState !== "all" && selectedCity && selectedCity !== "all") {
       const stateData = states.find((state) => state.abbreviation === selectedState);
       if (stateData) {
         const cityData = stateData.cities.find((city) => city.name === selectedCity);
@@ -82,9 +82,9 @@ const VehicleFilters = ({
   useEffect(() => {
     const newFilters: FilterTypes = {};
     
-    if (selectedState) newFilters.state = selectedState;
-    if (selectedCity) newFilters.city = selectedCity;
-    if (selectedRegion) newFilters.region = selectedRegion;
+    if (selectedState && selectedState !== "all") newFilters.state = selectedState;
+    if (selectedCity && selectedCity !== "all") newFilters.city = selectedCity;
+    if (selectedRegion && selectedRegion !== "all") newFilters.region = selectedRegion;
     if (priceValues[0] !== priceRange.min || priceValues[1] !== priceRange.max) {
       newFilters.priceMin = priceValues[0];
       newFilters.priceMax = priceValues[1];

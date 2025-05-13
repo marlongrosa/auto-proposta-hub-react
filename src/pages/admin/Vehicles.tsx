@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -446,7 +445,7 @@ const AdminVehicles = () => {
             <div className="space-y-2">
               <Label htmlFor="fuelType">Combustível</Label>
               <Select 
-                value={vehicleForm.fuelType || ''} 
+                value={vehicleForm.fuelType || 'Flex'} 
                 onValueChange={(value) => handleFormChange('fuelType', value)}
               >
                 <SelectTrigger id="fuelType">
@@ -466,7 +465,7 @@ const AdminVehicles = () => {
             <div className="space-y-2">
               <Label htmlFor="transmission">Câmbio</Label>
               <Select 
-                value={vehicleForm.transmission || ''} 
+                value={vehicleForm.transmission || 'manual'} 
                 onValueChange={(value: 'manual' | 'automatic') => handleFormChange('transmission', value)}
               >
                 <SelectTrigger id="transmission">
