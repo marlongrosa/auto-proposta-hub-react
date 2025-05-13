@@ -196,7 +196,7 @@ const VehicleFilters = ({
                 <SelectValue placeholder="Selecione o estado" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todos</SelectItem>
+                <SelectItem value="all">Todos</SelectItem>
                 {states.map((state) => (
                   <SelectItem key={state.abbreviation} value={state.abbreviation}>
                     {state.name}
@@ -213,7 +213,7 @@ const VehicleFilters = ({
                 <SelectValue placeholder="Selecione a cidade" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas</SelectItem>
+                <SelectItem value="all">Todas</SelectItem>
                 {cities.map((city) => (
                   <SelectItem key={city} value={city}>
                     {city}
@@ -230,7 +230,7 @@ const VehicleFilters = ({
                 <SelectValue placeholder="Selecione a região" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas</SelectItem>
+                <SelectItem value="all">Todas</SelectItem>
                 {regions.map((region) => (
                   <SelectItem key={region} value={region}>
                     {region}
