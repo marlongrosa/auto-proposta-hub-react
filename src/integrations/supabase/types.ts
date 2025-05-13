@@ -9,7 +9,148 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          name: string
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      proposals: {
+        Row: {
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id: string
+          message: string
+          status: string
+          updated_at: string
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          id?: string
+          message: string
+          status?: string
+          updated_at?: string
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          id?: string
+          message?: string
+          status?: string
+          updated_at?: string
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposals_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicles: {
+        Row: {
+          city: string
+          color: string
+          created_at: string
+          dealer_id: string
+          fuel_type: string
+          id: string
+          images: string[]
+          is_sold: boolean
+          main_image: string | null
+          make: string
+          mileage: number
+          model: string
+          price: number
+          region: string | null
+          state: string
+          transmission: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          city: string
+          color: string
+          created_at?: string
+          dealer_id: string
+          fuel_type: string
+          id?: string
+          images?: string[]
+          is_sold?: boolean
+          main_image?: string | null
+          make: string
+          mileage: number
+          model: string
+          price: number
+          region?: string | null
+          state: string
+          transmission: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          city?: string
+          color?: string
+          created_at?: string
+          dealer_id?: string
+          fuel_type?: string
+          id?: string
+          images?: string[]
+          is_sold?: boolean
+          main_image?: string | null
+          make?: string
+          mileage?: number
+          model?: string
+          price?: number
+          region?: string | null
+          state?: string
+          transmission?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicles_dealer_id_fkey"
+            columns: ["dealer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

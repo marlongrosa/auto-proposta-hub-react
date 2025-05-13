@@ -1,153 +1,104 @@
 
-import { ReactNode, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ChevronRight, LayoutDashboard, Car, Users, FileText, LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Toaster } from '@/components/ui/sonner';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  ChevronDown, 
-  LayoutDashboard, 
-  Car, 
-  UserCircle, 
-  MessageSquare, 
-  LogOut 
-} from 'lucide-react';
 
-interface AdminLayoutProps {
-  children: ReactNode;
+interface NavItemProps {
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+  active: boolean;
 }
 
-const AdminLayout = ({ children }: AdminLayoutProps) => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const NavItem = ({ to, icon, label, active }: NavItemProps) => (
+  <Link to={to} className="block">
+    <div
+      className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+        active
+          ? 'bg-autoproposta-blue text-white'
+          : 'hover:bg-gray-100'
+      }`}
+    >
+      <div className={`mr-3 ${active ? 'text-white' : 'text-gray-500'}`}>{icon}</div>
+      <span>{label}</span>
+    </div>
+  </Link>
+);
 
-  const handleLogout = () => {
-    logout();
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  
+  const isActive = (path: string) => location.pathname === path;
+  
+  const handleLogout = async () => {
+    await logout();
     navigate('/admin/login');
   };
-
+  
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="hidden md:block bg-autoproposta-blue text-white w-64 p-6">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold">AutoProposta</h1>
-          <p className="text-sm text-gray-300">Painel Administrativo</p>
-        </div>
-        
-        <nav className="space-y-2">
-          <Link to="/admin" className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition">
-            <LayoutDashboard size={20} />
+      <div className="hidden md:flex md:w-64 flex-col bg-white border-r">
+        <div className="p-4 border-b">
+          <h1 className="text-xl font-bold text-autoproposta-blue">AutoProposta</h1>
+          <div className="flex items-center text-sm text-gray-500 mt-1">
+            <span>Admin</span>
+            <ChevronRight size={14} className="mx-1" />
             <span>Dashboard</span>
-          </Link>
-          <Link to="/admin/vehicles" className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition">
-            <Car size={20} />
-            <span>Veículos</span>
-          </Link>
-          <Link to="/admin/dealers" className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition">
-            <UserCircle size={20} />
-            <span>Vendedores</span>
-          </Link>
-          <Link to="/admin/proposals" className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition">
-            <MessageSquare size={20} />
-            <span>Propostas</span>
-          </Link>
-        </nav>
-        
-        <div className="absolute bottom-6 left-6">
-          <button 
-            onClick={handleLogout} 
-            className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition"
-          >
-            <LogOut size={20} />
-            <span>Sair</span>
-          </button>
+          </div>
         </div>
-      </aside>
+        
+        <div className="flex-1 p-4 space-y-2">
+          <NavItem 
+            to="/admin" 
+            icon={<LayoutDashboard size={20} />} 
+            label="Dashboard" 
+            active={isActive("/admin")} 
+          />
+          <NavItem 
+            to="/admin/vehicles" 
+            icon={<Car size={20} />} 
+            label="Veículos" 
+            active={isActive("/admin/vehicles")} 
+          />
+          <NavItem 
+            to="/admin/dealers" 
+            icon={<Users size={20} />} 
+            label="Vendedores" 
+            active={isActive("/admin/dealers")} 
+          />
+          <NavItem 
+            to="/admin/proposals" 
+            icon={<FileText size={20} />} 
+            label="Propostas" 
+            active={isActive("/admin/proposals")} 
+          />
+        </div>
+        
+        <div className="p-4 border-t">
+          <Button 
+            variant="ghost" 
+            className="w-full flex items-center justify-start text-red-500 hover:bg-red-50 hover:text-red-600"
+            onClick={handleLogout}
+          >
+            <LogOut size={20} className="mr-3" />
+            Sair
+          </Button>
+        </div>
+      </div>
       
       {/* Main Content */}
-      <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Top Bar */}
-        <header className="bg-white shadow-sm p-4">
-          <div className="flex justify-between items-center">
-            <div className="md:hidden">
-              <button 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-                className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-            </div>
-            
-            <div className="md:hidden font-bold">AutoProposta Admin</div>
-            
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <div className="flex items-center space-x-2 cursor-pointer">
-                  <div className="bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center text-gray-700 font-bold">
-                    {user?.name.charAt(0)}
-                  </div>
-                  <span className="hidden md:inline-block">{user?.name}</span>
-                  <ChevronDown size={16} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-        
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-autoproposta-blue text-white p-4">
-            <nav className="space-y-2">
-              <Link 
-                to="/admin" 
-                onClick={() => setIsMobileMenuOpen(false)} 
-                className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition"
-              >
-                <LayoutDashboard size={20} />
-                <span>Dashboard</span>
-              </Link>
-              <Link 
-                to="/admin/vehicles" 
-                onClick={() => setIsMobileMenuOpen(false)} 
-                className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition"
-              >
-                <Car size={20} />
-                <span>Veículos</span>
-              </Link>
-              <Link 
-                to="/admin/dealers" 
-                onClick={() => setIsMobileMenuOpen(false)} 
-                className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition"
-              >
-                <UserCircle size={20} />
-                <span>Vendedores</span>
-              </Link>
-              <Link 
-                to="/admin/proposals" 
-                onClick={() => setIsMobileMenuOpen(false)} 
-                className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition"
-              >
-                <MessageSquare size={20} />
-                <span>Propostas</span>
-              </Link>
-              <button 
-                onClick={handleLogout} 
-                className="flex items-center space-x-2 p-3 rounded-md hover:bg-blue-800 transition w-full text-left"
-              >
-                <LogOut size={20} />
-                <span>Sair</span>
-              </button>
-            </nav>
-          </div>
-        )}
-        
-        {/* Page Content */}
-        <div className="flex-1 overflow-auto p-6">
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 overflow-y-auto p-6">
           {children}
         </div>
       </div>
+      
+      <Toaster />
     </div>
   );
 };
